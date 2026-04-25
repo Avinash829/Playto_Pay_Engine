@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# exit on error
 set -o errexit
 
 pip install -r requirements.txt
 python manage.py collectstatic --no-input
 python manage.py migrate
 
-# Automatically seed data and schedule cron jobs
-python seed_data.py
+# THE RESET COMMANDS
+python manage.py flush --no-input  # This wipes the DB tables
+python seed_data.py                # This puts the original data back
