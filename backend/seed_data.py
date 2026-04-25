@@ -42,7 +42,6 @@ INITIAL_CREDITS = [
 
 
 def seed_merchants():
-    # Zip pairs the lists together: (Merchant 1, 100000), (Merchant 2, 50000), etc.
     for merchant_data, starting_credit in zip(MERCHANTS, INITIAL_CREDITS):
         merchant, created = Merchant.objects.get_or_create(
             email=merchant_data['email'],
@@ -100,7 +99,7 @@ def create_superuser():
         )
 
 def setup_cron_jobs():
-    # This tells Django-Q to run our sweeper every 1 minute
+    # Django-Q to run our sweeper every 1 minute
     schedule, created = Schedule.objects.get_or_create(
         func='payouts.tasks.retry_stuck_payouts',
         defaults={

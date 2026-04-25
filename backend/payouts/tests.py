@@ -30,7 +30,7 @@ class PayoutEngineTests(TransactionTestCase):
             idempotency_key=idemp_key
         )
         
-        # Second Request (Identical Key)
+        # Second Request with the same Idempotency Key
         payout2, code2, response2 = create_payout(
             merchant_id=self.merchant.id,
             amount_paise=6000,
@@ -38,7 +38,7 @@ class PayoutEngineTests(TransactionTestCase):
             idempotency_key=idemp_key
         )
 
-        # Assertions
+        # Both should return the same response and status code, and only one payout should be created
         self.assertEqual(code1, 201)
         self.assertEqual(code2, 201)
         self.assertEqual(response1, response2)

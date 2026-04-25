@@ -29,7 +29,6 @@ def process_payout(payout_id):
         if outcome < 0.7:
             payout.status = 'COMPLETED'
             payout.save(update_fields=['status'])
-            # Morph the existing hold into a hard debit
             LedgerEntry.objects.filter(payout=payout, entry_type='HOLD').update(entry_type='DEBIT')
             return
 
