@@ -13,8 +13,8 @@ This system handles idempotent API requests, utilizes strict database-level lock
 
 ## Live Demo
 
--   **Frontend Dashboard:** `[INSERT_YOUR_VERCEL_URL_HERE]`
--   **Backend API:** `[INSERT_YOUR_RENDER_URL_HERE]`
+-   **Frontend Dashboard:** `https://playto-pay-engine.pages.dev/`
+-   **Backend API:** `https://playto-play-engine.onrender.com`
 
 ## Local Setup Instructions
 
