@@ -1,110 +1,55 @@
-import { Clock, CheckCircle, XCircle, RefreshCw } from "lucide-react";
-
-const StatusBadge = ({ status }) => {
-    const styles = {
-        COMPLETED:
-            "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-        FAILED: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
-        PROCESSING:
-            "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-        PENDING:
-            "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
-    };
-
-    const Icons = {
-        COMPLETED: CheckCircle,
-        FAILED: XCircle,
-        PROCESSING: RefreshCw,
-        PENDING: Clock,
-    };
-    const Icon = Icons[status] || Clock;
-
-    return (
-        <span
-            className={`px-2.5 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 w-max ${styles[status]}`}
-        >
-            <Icon
-                className={`w-3.5 h-3.5 ${
-                    status === "PROCESSING" ? "animate-spin" : ""
-                }`}
-            />
-            {status}
-        </span>
-    );
-};
-
+/* eslint-disable no-unused-vars */
 export default function PayoutTable({ payouts, isLoading }) {
-    const renderSkeletons = () =>
-        [1, 2, 3].map((i) => (
-            <tr
-                key={i}
-                className="animate-pulse border-b border-gray-100 dark:border-gray-800"
-            >
-                <td className="px-5 py-4">
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-12"></div>
-                </td>
-                <td className="px-5 py-4">
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
-                </td>
-                <td className="px-5 py-4">
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
-                </td>
-                <td className="px-5 py-4">
-                    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-24"></div>
-                </td>
-            </tr>
-        ));
-
     return (
-        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden h-full transition-colors">
-            <div className="p-5 border-b border-gray-100 dark:border-gray-800">
-                <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">
-                    Payout History
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <div className="px-6 py-5 border-b border-gray-50 dark:border-gray-800 flex items-center justify-between">
+                <h2 className="font-bold text-gray-800 dark:text-gray-100">
+                    Payout Activity
                 </h2>
+                <div className="flex gap-2">
+                    <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+                </div>
             </div>
             <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm text-gray-600 dark:text-gray-400">
-                    <thead className="bg-gray-50/50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 font-medium">
+                <table className="w-full text-left border-collapse">
+                    <thead className="bg-gray-50/50 dark:bg-gray-800/40 text-[11px] uppercase tracking-wider font-bold text-gray-400">
                         <tr>
-                            <th className="px-5 py-3">ID</th>
-                            <th className="px-5 py-3">Bank Account</th>
-                            <th className="px-5 py-3">Amount</th>
-                            <th className="px-5 py-3">Status</th>
+                            <th className="px-6 py-4">Transaction</th>
+                            <th className="px-6 py-4">Destination</th>
+                            <th className="px-6 py-4">Amount</th>
+                            <th className="px-6 py-4">Status</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                        {isLoading ? (
-                            renderSkeletons()
-                        ) : payouts.length === 0 ? (
-                            <tr>
-                                <td
-                                    colSpan="4"
-                                    className="text-center py-8 text-gray-400 dark:text-gray-500"
-                                >
-                                    No payouts yet
+                    <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
+                        {payouts.map((p) => (
+                            <tr
+                                key={p.id}
+                                className="group hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-colors duration-200"
+                            >
+                                <td className="px-6 py-4 font-mono text-[11px] text-gray-400 group-hover:text-blue-500 transition-colors">
+                                    #{String(p.id).slice(0, 8)}
+                                </td>
+                                <td className="px-6 py-4 text-sm font-medium">
+                                    {p.bank_account_id}
+                                </td>
+                                <td className="px-6 py-4 text-sm font-bold">
+                                    ₹{(p.amount_paise / 100).toFixed(2)}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <span
+                                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wide border ${
+                                            p.status === "COMPLETED"
+                                                ? "bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20"
+                                                : p.status === "FAILED"
+                                                ? "bg-rose-50 text-rose-700 border-rose-100 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20"
+                                                : "bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20"
+                                        }`}
+                                    >
+                                        {p.status}
+                                    </span>
                                 </td>
                             </tr>
-                        ) : (
-                            payouts.map((p) => (
-                                <tr
-                                    key={p.id}
-                                    className="hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
-                                >
-                                    <td className="px-5 py-3 font-mono text-xs text-gray-500 dark:text-gray-400">
-                                        #{p.id}
-                                    </td>
-                                    <td className="px-5 py-3">
-                                        {p.bank_account_id}
-                                    </td>
-                                    <td className="px-5 py-3 font-medium text-gray-900 dark:text-gray-100">
-                                        ₹ {(p.amount_paise / 100).toFixed(2)}
-                                    </td>
-                                    <td className="px-5 py-3">
-                                        <StatusBadge status={p.status} />
-                                    </td>
-                                </tr>
-                            ))
-                        )}
+                        ))}
                     </tbody>
                 </table>
             </div>

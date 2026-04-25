@@ -1,68 +1,76 @@
 import {
     Wallet,
-    IndianRupee,
-    AlertCircle,
-    CheckCircle,
-    XCircle,
+    ArrowUpCircle,
+    CheckCircle2,
+    AlertTriangle,
 } from "lucide-react";
 
 export default function StatsGrid({ balancePaise, payouts, isLoading }) {
-    const formatRupees = (paise) => (paise / 100).toFixed(2);
+    const format = (p) =>
+        (p / 100).toLocaleString("en-IN", {
+            style: "currency",
+            currency: "INR",
+        });
 
-    const heldBalancePaise = payouts
+    const held = payouts
         .filter((p) => ["PENDING", "PROCESSING"].includes(p.status))
         .reduce((sum, p) => sum + p.amount_paise, 0);
 
-    const completedCount = payouts.filter(
-        (p) => p.status === "COMPLETED"
-    ).length;
-    const failedCount = payouts.filter((p) => p.status === "FAILED").length;
-
-    const renderValue = (value, isCurrency = false) => {
-        if (isLoading) {
-            return (
-                <div className="h-8 w-24 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse mt-1"></div>
-            );
-        }
-        return (
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center mt-1">
-                {isCurrency && <IndianRupee className="w-5 h-5 mr-1" />}
-                {value}
-            </h2>
-        );
-    };
+    const stats = [
+        {
+            label: "Available",
+            val: format(balancePaise),
+            icon: Wallet,
+            color: "text-blue-600",
+            bg: "bg-blue-50 dark:bg-blue-500/10",
+        },
+        {
+            label: "Processing",
+            val: format(held),
+            icon: ArrowUpCircle,
+            color: "text-amber-600",
+            bg: "bg-amber-50 dark:bg-amber-500/10",
+        },
+        {
+            label: "Successful",
+            val: payouts.filter((p) => p.status === "COMPLETED").length,
+            icon: CheckCircle2,
+            color: "text-emerald-600",
+            bg: "bg-emerald-50 dark:bg-emerald-500/10",
+        },
+        {
+            label: "Failed",
+            val: payouts.filter((p) => p.status === "FAILED").length,
+            icon: AlertTriangle,
+            color: "text-rose-600",
+            bg: "bg-rose-50 dark:bg-rose-500/10",
+        },
+    ];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
-                    <Wallet className="w-4 h-4" /> Available Balance
-                </p>
-                {renderValue(formatRupees(balancePaise), true)}
-            </div>
-
-            <div className="bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-yellow-500" /> Held
-                    Balance
-                </p>
-                {renderValue(formatRupees(heldBalancePaise), true)}
-            </div>
-
-            <div className="bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" /> Completed
-                    Payouts
-                </p>
-                {renderValue(completedCount)}
-            </div>
-
-            <div className="bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
-                    <XCircle className="w-4 h-4 text-red-500" /> Failed Payouts
-                </p>
-                {renderValue(failedCount)}
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {stats.map((s, i) => (
+                <div
+                    key={i}
+                    className="group bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                >
+                    <div className="flex items-center justify-between mb-4">
+                        <div className={`p-2 rounded-lg ${s.bg} ${s.color}`}>
+                            <s.icon className="w-5 h-5" />
+                        </div>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                            {s.label}
+                        </span>
+                    </div>
+                    {isLoading ? (
+                        <div className="h-8 w-3/4 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse" />
+                    ) : (
+                        <p className="text-2xl font-bold tracking-tight">
+                            {s.val}
+                        </p>
+                    )}
+                </div>
+            ))}
         </div>
     );
 }
