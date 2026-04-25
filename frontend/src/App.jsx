@@ -1,5 +1,13 @@
 import Dashboard from "./pages/Dashboard";
+import CustomCursor from "./components/CustomCursor";
 
-export default function App() {
-    return <Dashboard />;
+function App() {
+    return (
+        <>
+            <CustomCursor />
+            <Dashboard />
+        </>
+    );
 }
+
+export default App;
