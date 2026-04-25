@@ -1,13 +1,2 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
-html,
-body {
-    cursor: none !important;
-}
-
-/* Ensure buttons still feel clickable by adding back a pointer or custom state if you want */
-a,
-button,
-select {
-    cursor: none !important;
-}
