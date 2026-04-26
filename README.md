@@ -13,7 +13,7 @@ This system is designed to handle **high-concurrency financial transactions** wi
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend
 - Python 3.14
@@ -248,6 +248,6 @@ EXPLAINER.md
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 Built for the **Playto Founding Engineer Challenge**.
